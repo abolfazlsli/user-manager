@@ -1,24 +1,17 @@
 import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-    /*
-    GET /users
-    GET /users/:id
-    POST /users
-    */
+    constructor(private readonly userService : UsersService) {}
 
     @Get("/")
-    findAll(@Query("data") data?:string) {
-        return {
-            apidaat : "all the users recv"
-        }
+    findAll(@Query("role") data?:"ADMIN" | "USER") {
+        return this.userService.findAll(data)
     }
     @Get(":id")
     findOne(@Param("id") id : string) {
-        return{
-            apidata : "data of one user " + id
-        }
+        return this.userService.findOne(+id)
     }
     @Post()
     create(@Body() request : object) {
